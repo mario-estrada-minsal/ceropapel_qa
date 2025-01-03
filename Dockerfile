@@ -4,7 +4,7 @@ FROM registry.access.redhat.com/ubi8/ubi:latest
 USER root
 
 # Instalar Java 8 usando UBI
-RUN yum install -y java-1.8.0-openjdk && \
+RUN yum install -y java-1.8.0-openjdk curl unzip && \
     yum clean all
 
 # Definir correctamente JAVA_HOME y PATH
