@@ -3,12 +3,12 @@ FROM registry.access.redhat.com/ubi8/ubi:latest
 
 USER root
 
-# Instalar Java 8 usando UBI
+# Instalar Java 8, curl y unzip
 RUN yum install -y java-1.8.0-openjdk curl unzip && \
     yum clean all
 
-# Definir correctamente JAVA_HOME y PATH
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+# Definir JAVA_HOME con la ruta correcta
+ENV JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk
 ENV PATH=$JAVA_HOME/bin:$PATH
 
 # Descargar e instalar WildFly
@@ -24,5 +24,5 @@ RUN chown -R 1001:1001 $WILDFLY_HOME
 
 USER 1001
 
-# Ejecutar WildFly usando la ruta correcta
+# Ejecutar WildFly usando la ruta corregida
 CMD ["/opt/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
