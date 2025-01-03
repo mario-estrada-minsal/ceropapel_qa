@@ -1,13 +1,13 @@
-# Imagen base UBI8 con Java 8 y WildFly
+# Imagen base UBI8
 FROM registry.access.redhat.com/ubi8/ubi:latest
 
 USER root
 
-# Instalar Java 8
-RUN yum install -y java-1.8.0-openjdk && \
+# Instalar herramientas necesarias y Java 8
+RUN yum install -y java-1.8.0-openjdk curl unzip && \
     yum clean all
 
-# Definir JAVA_HOME correctamente
+# Definir JAVA_HOME
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
 ENV PATH=$JAVA_HOME/bin:$PATH
 
@@ -19,10 +19,10 @@ RUN curl -L https://github.com/wildfly/wildfly/releases/download/$WILDFLY_VERSIO
     mv /opt/wildfly-$WILDFLY_VERSION $WILDFLY_HOME && \
     rm /tmp/wildfly.zip
 
-# Cambiar permisos
+# Cambiar permisos al usuario no root
 RUN chown -R 1001:1001 $WILDFLY_HOME
 
 USER 1001
 
-# Ejecutar WildFly con la ruta corregida
+# Ejecutar WildFly
 CMD ["/opt/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
