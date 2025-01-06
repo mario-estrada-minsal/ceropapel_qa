@@ -35,9 +35,9 @@ RUN mkdir -p $WILDFLY_HOME/modules/system/layers/base/org/postgresql/main/ && \
     </module>' > $WILDFLY_HOME/modules/system/layers/base/org/postgresql/main/module.xml
 
 # Cambiar permisos para usuario no root
-RUN chown -R 1001:1001 $WILDFLY_HOME
+RUN chown -R 1000:1000 $WILDFLY_HOME
 
-USER 1001
+USER 1000
 
 # Exponer puertos para administración y aplicación
 EXPOSE 8080 9990
