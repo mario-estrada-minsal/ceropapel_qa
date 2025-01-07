@@ -34,14 +34,6 @@ RUN mkdir -p $WILDFLY_HOME/modules/system/layers/base/org/postgresql/main/ && \
         </dependencies> \
     </module>' > $WILDFLY_HOME/modules/system/layers/base/org/postgresql/main/module.xml
 
-# Registrar el driver PostgreSQL usando la CLI de WildFly
-RUN $WILDFLY_HOME/bin/standalone.sh & \
-    sleep 10 && \
-    $WILDFLY_HOME/bin/jboss-cli.sh --connect --commands=
-    "module add --name=org.postgresql --resources=$WILDFLY_HOME/modules/system/layers/base/org/postgresql/main/postgresql-42.7.0.jar --dependencies=javax.api,javax.transaction.api", \
-    "/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql, driver-module-name=org.postgresql, driver-class-name=org.postgresql.Driver)" && \
-    pkill java
-
 # Cambiar permisos para usuario no root
 RUN chown -R 1000:1000 $WILDFLY_HOME
 
