@@ -4,7 +4,7 @@ FROM registry.access.redhat.com/ubi8/ubi:latest
 USER root
 
 # Instalar Java 8, curl y unzip
-RUN yum install -y java-1.8.0-openjdk curl unzip ping nano ps && \
+RUN yum install -y java-1.8.0-openjdk curl unzip ping nano procps && \
     yum clean all
 
 # Definir JAVA_HOME y PATH correctamente
