@@ -3,8 +3,8 @@ FROM registry.access.redhat.com/ubi8/ubi:latest
 
 USER root
 
-# Instalar Java 8, curl, unzip, iputils, nano, procps, Apache HTTP y supervisord
-RUN yum install -y java-1.8.0-openjdk curl unzip iputils nano procps httpd httpd-tools mod_ssl supervisor && \
+# Instalar Java 8, curl, unzip, iputils, nano, procps, Apache HTTPD y módulos necesarios
+RUN yum install -y java-1.8.0-openjdk curl unzip iputils nano procps httpd httpd-tools mod_ssl && \
     yum clean all
 
 # Definir JAVA_HOME y PATH correctamente
@@ -51,24 +51,16 @@ RUN chown -R 1000:1000 $WILDFLY_HOME /etc/httpd /var/log/httpd /var/run/httpd
 # Exponer puertos para Apache y WildFly
 EXPOSE 80 443 8080 9990
 
-# Configurar Supervisor para ejecutar ambos servicios
-RUN mkdir -p /etc/supervisor.d
-RUN echo "[supervisord] \
-nodaemon=true \
-[program:wildfly] \
-command=/opt/wildfly/bin/standalone.sh -b 0.0.0.0 \
-autostart=true \
-autorestart=true \
-stderr_logfile=/var/log/wildfly.err.log \
-stdout_logfile=/var/log/wildfly.out.log \
-[program:httpd] \
-command=/usr/sbin/httpd -DFOREGROUND \
-autostart=true \
-autorestart=true \
-stderr_logfile=/var/log/httpd.err.log \
-stdout_logfile=/var/log/httpd.out.log" > /etc/supervisor.d/supervisord.conf
+# Agregar un script de inicio para manejar ambos servicios
+RUN echo '#!/bin/bash \n\
+# Iniciar Apache HTTPD \n\
+echo "Iniciando Apache..." \n\
+httpd -k start \n\
+# Iniciar WildFly \n\
+echo "Iniciando WildFly..." \n\
+exec /opt/wildfly/bin/standalone.sh -b 0.0.0.0' > /start.sh && chmod +x /start.sh
 
 USER 1000
 
-# Ejecutar supervisord para iniciar Apache y WildFly
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor.d/supervisord.conf"]
+# Ejecutar el script de inicio
+CMD ["/bin/bash", "/start.sh"]
