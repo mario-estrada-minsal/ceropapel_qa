@@ -4,8 +4,13 @@ FROM registry.access.redhat.com/ubi8/ubi:latest
 USER root
 
 # Instalar Java 8, curl y unzip
-RUN yum install -y java-1.8.0-openjdk curl unzip iputils nano procps && \
+RUN yum install -y java-1.8.0-openjdk curl unzip iputils nano procps glibc-langpack-en && \
     yum clean all
+
+# Configurar las locales
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
 
 # Definir JAVA_HOME y PATH correctamente
 ENV JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk
