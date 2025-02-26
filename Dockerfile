@@ -26,12 +26,12 @@ RUN curl -L https://github.com/wildfly/wildfly/releases/download/$WILDFLY_VERSIO
 
 # Agregar el módulo de PostgreSQL al contenedor
 RUN mkdir -p $WILDFLY_HOME/modules/system/layers/base/org/postgresql/main/ && \
-    curl -o $WILDFLY_HOME/modules/system/layers/base/org/postgresql/main/postgresql-42.7.0.jar \
-    https://jdbc.postgresql.org/download/postgresql-42.7.0.jar && \
+    curl -o $WILDFLY_HOME/modules/system/layers/base/org/postgresql/main/postgresql-42.2.29.jar \
+    https://jdbc.postgresql.org/download/postgresql-42.2.29.jar && \
     echo '<?xml version="1.0" encoding="UTF-8"?> \
     <module xmlns="urn:jboss:module:1.1" name="org.postgresql"> \
         <resources> \
-            <resource-root path="postgresql-42.7.0.jar"/> \
+            <resource-root path="postgresql-42.2.29.jar"/> \
         </resources> \
         <dependencies> \
             <module name="javax.api"/> \
